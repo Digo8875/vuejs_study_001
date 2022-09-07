@@ -1,0 +1,19 @@
+version: "3"
+services:
+  # vuejs app
+  vueapp:
+    container_name: vueapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/app"
+    ports:
+      - 8989:80
+    networks:
+      - vuenetwork
+    environment:
+      - DEFAULT_ENV=DEFAULT
+
+networks:
+  vuenetwork:
