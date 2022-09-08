@@ -3,7 +3,6 @@ import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import type { InjectionKey } from "vue";
 import { ADD_PROJECT, EDIT_PROJECT, DELETE_PROJECT, NOTIFY } from "./mutation-types";
 import type { NotificationI } from "@/interfaces/NotificationI"
-import { NotificationType } from "@/interfaces/NotificationI"
 
 interface State {
     projects: ProjectI[],
