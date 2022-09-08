@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import SideBar from './components/SideBar.vue'
-    import TaskManager from './components/TaskManager.vue'
 
     function darkModeEvent(darkMode: boolean) {
         console.log("App modo escuro")
@@ -23,7 +22,7 @@
             <SideBar @darkModeEvent="darkModeEvent"/>
         </div>
         <div class="column is-12-mobile is-8-tablet is-8-desktop is-9-widescreen content">
-            <TaskManager />
+            <router-view></router-view>
         </div>
     </main>
 </template>

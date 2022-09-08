@@ -1,12 +1,12 @@
 <script lang="ts">
     import { defineComponent } from 'vue'
-    import Form from './Form.vue'
-    import Task from './Task.vue'
-    import Box from './Box.vue'
+    import Form from '../components/Form.vue'
+    import Task from '../components/Task.vue'
+    import Box from '../components/Box.vue'
     import type TaskI from '../interfaces/TaskI'
 
     export default defineComponent({
-        name: "TaskManager",
+        name: "TasksView",
         components: {
             Form,
             Task,
