@@ -3,7 +3,7 @@
     import { useStore } from '@/store'
     import { ADD_PROJECT, EDIT_PROJECT, NOTIFY } from '@/store/mutation-types'
     import { NotificationType } from '@/interfaces/NotificationI'
-    import { notificationMixin } from '@/mixins/notify'
+    import useNotificator from '@/hooks/notificator'
 
     export default defineComponent({
         name: "Form",
@@ -12,7 +12,6 @@
                 type: String
             }
         },
-        mixins: [notificationMixin],
         mounted () {
             if(this.id) {
                 const project = this.store.state.projects.find(proj => proj.id == this.id)
@@ -47,8 +46,10 @@
         },
         setup () {
             const store = useStore()
+            const { notify } = useNotificator()
             return {
-                store
+                store,
+                notify
             }
         }
     })
