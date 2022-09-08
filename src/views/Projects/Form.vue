@@ -1,9 +1,20 @@
 <script lang="ts">
-    import { computed, defineComponent } from 'vue'
+    import { defineComponent } from 'vue'
     import { useStore } from '@/store'
 
     export default defineComponent({
-        name: "ProjectsView",
+        name: "Form",
+        props: {
+            id: {
+                type: String
+            }
+        },
+        mounted () {
+            if(this.id) {
+                const project = this.store.state.projects.find(proj => proj.id == this.id)
+                this.projectName = project?.name || ''
+            }
+        },
         data () {
             return {
                 projectName: ""
@@ -11,15 +22,22 @@
         },
         methods: {
             save () {
-                this.store.commit('ADD_PROJECT', this.projectName)
+                if(this.id) {
+                    this.store.commit('EDIT_PROJECT', {
+                        id: this.id,
+                        name: this.projectName
+                    })
+                } else {
+                    this.store.commit('ADD_PROJECT', this.projectName)
+                }
                 this.projectName = ''
+                this.$router.push('/projects')
             }
         },
         setup () {
             const store = useStore()
             return {
-                store,
-                projects: computed(() => store.state.projects)
+                store
             }
         }
     })
@@ -27,7 +45,7 @@
 </script>
 
 <template>
-    <section class="projects">
+    <section>
         <h1 class="title">
             Projetos
         </h1>
@@ -44,25 +62,8 @@
                 </button>
             </div>
         </form>
-        <table class="table is-full-width">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="project in projects" :key="project.id">
-                    <td>{{ project.id }}</td>
-                    <td>{{ project.name }}</td>
-                </tr>
-            </tbody>
-        </table>
     </section>
 </template>
 
-<style scoped>
-    .projects{
-        padding: 2.5rem;
-    }
+<style>
 </style>
