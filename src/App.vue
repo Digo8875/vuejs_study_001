@@ -7,10 +7,12 @@
         console.log(darkMode)
 
         var element = document.getElementById("main")
-        if (darkMode) {
-            element.classList.add("dark-mode")
-        } else {
-            element.classList.remove("dark-mode")
+        if (element) {
+            if (darkMode) {
+                element.classList.add("dark-mode")
+            } else {
+                element.classList.remove("dark-mode")
+            }
         }
     }
 </script>
