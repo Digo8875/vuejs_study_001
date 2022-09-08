@@ -1,6 +1,8 @@
 <script lang="ts">
     import { defineComponent } from 'vue'
     import { useStore } from '@/store'
+    import { ADD_PROJECT, EDIT_PROJECT, NOTIFY } from '@/store/mutation-types'
+import { NotificationType } from '@/interfaces/NotificationI'
 
     export default defineComponent({
         name: "Form",
@@ -23,14 +25,19 @@
         methods: {
             save () {
                 if(this.id) {
-                    this.store.commit('EDIT_PROJECT', {
+                    this.store.commit(EDIT_PROJECT, {
                         id: this.id,
                         name: this.projectName
                     })
                 } else {
-                    this.store.commit('ADD_PROJECT', this.projectName)
+                    this.store.commit(ADD_PROJECT, this.projectName)
                 }
                 this.projectName = ''
+                this.store.commit(NOTIFY, {
+                    title: 'Novo projeto criado',
+                    text: 'Seu projeto já está disponível',
+                    type: NotificationType.SUCCESS
+                })
                 this.$router.push('/projects')
             }
         },
