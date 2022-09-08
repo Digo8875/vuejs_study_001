@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import SideBar from './components/SideBar.vue'
+    import Notification from './components/Notification.vue';
 
     function darkModeEvent(darkMode: boolean) {
         console.log("App modo escuro")
@@ -18,6 +19,7 @@
 
 <template>
     <main class="columns is-mobile is-gapless is-multiline" id="main">
+        <Notification />
         <div class="column is-12-mobile is-4-tablet is-4-desktop is-3-widescreen">
             <SideBar @darkModeEvent="darkModeEvent"/>
         </div>
