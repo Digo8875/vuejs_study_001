@@ -45,6 +45,26 @@
                 <Button @clickEvent="toggleMode" :disabled="false" iconClass="" :text="buttonText"/>
             </div>
         </div>
+        <div class="columns is-mobile is-gapless is-vcentered">
+            <nav class="panel mt-5">
+                <ul>
+                    <li>
+                        <router-link to="/" class="link">
+                            <i class="fas fa-tasks">
+                                Tarefas
+                            </i>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link to="projects" class="link">
+                            <i class="fas fa-project-diagram">
+                                Projetos
+                            </i>
+                        </router-link>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 </template>
 
@@ -60,5 +80,17 @@
             padding: 2.5rem;
             height: auto;
         }
+    }
+    .panel li {
+        margin: 8px 0;
+    }
+    .link {
+        color: #fff;
+    }
+    .link:hover {
+        color: #FAF0CA;
+    }
+    .link.router-link-active {
+        color: #FAF0CA;
     }
 </style>

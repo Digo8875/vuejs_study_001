@@ -1,4 +1,7 @@
+import type ProjectI from "./ProjectI";
+
 export default interface TaskI {
     durationSeconds: number,
-    description: string
+    description: string,
+    project: ProjectI
 }
