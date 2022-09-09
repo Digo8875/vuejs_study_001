@@ -1,9 +1,9 @@
 import type ProjectI from "@/interfaces/ProjectI";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import type { InjectionKey } from "vue";
-import { ADD_PROJECT, EDIT_PROJECT, DELETE_PROJECT, NOTIFY, DEFINE_PROJECTS } from "./mutation-types"
+import { ADD_PROJECT, EDIT_PROJECT, EXCLUDE_PROJECT, NOTIFY, DEFINE_PROJECTS } from "./mutation-types"
 import type { NotificationI } from "@/interfaces/NotificationI"
-import { GET_PROJECTS } from './actions-type'
+import { GET_PROJECTS, STORE_PROJECT, UPDATE_PROJECT, DELETE_PROJECT } from './actions-type'
 import http from '@/http'
 
 interface State {
@@ -30,7 +30,7 @@ export const store = createStore<State>({
             const index = state.projects.findIndex(proj => proj.id == project.id)
             state.projects[index] = project
         },
-        [DELETE_PROJECT](state, id: string) {
+        [EXCLUDE_PROJECT](state, id: string) {
             state.projects = state.projects.filter(proj => proj.id != id)
         },
         [DEFINE_PROJECTS](state, projects: ProjectI[]) {
@@ -49,6 +49,18 @@ export const store = createStore<State>({
         [GET_PROJECTS]({commit}) {
             http.get('projects')
                 .then(response => commit(DEFINE_PROJECTS, response.data))
+        },
+        [STORE_PROJECT](context, projectName: string) {
+            return http.post('/projects', {
+                name: projectName
+            })
+        },
+        [UPDATE_PROJECT](context, project: ProjectI) {
+            return http.put(`/projects/${project.id}`, project)
+        },
+        [DELETE_PROJECT]({commit}, id: string) {
+            return http.delete(`/projects/${id}`)
+                .then(() => commit(EXCLUDE_PROJECT, id))
         }
     }
 })

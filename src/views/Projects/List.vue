@@ -1,22 +1,30 @@
 <script lang="ts">
     import { computed, defineComponent } from 'vue'
     import { useStore } from '@/store'
-    import { DELETE_PROJECT } from '@/store/mutation-types'
-    import { GET_PROJECTS } from '@/store/actions-type'
+    import { DELETE_PROJECT, GET_PROJECTS } from '@/store/actions-type'
+    import { NotificationType } from '@/interfaces/NotificationI'
+    import useNotificator from '@/hooks/notificator'
 
     export default defineComponent({
         name: "List",
         setup () {
             const store = useStore()
+            const { notify } = useNotificator()
             store.dispatch(GET_PROJECTS)
             return {
                 projects: computed(() => store.state.projects),
-                store
+                store,
+                notify
             }
         },
         methods: {
             deleteProject(id: string) {
-                this.store.commit(DELETE_PROJECT, id)
+                this.store.dispatch(DELETE_PROJECT, id)
+                    .then(() => this.responseSuccess())
+            },
+            responseSuccess () {
+                this.notify(NotificationType.SUCCESS, 'Ação efetuada', 'Projeto excluído com sucesso!')
+                this.$router.push('/projects')
             }
         }
     })
