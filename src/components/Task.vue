@@ -1,11 +1,9 @@
 <script lang="ts">
-    import { defineComponent, ref } from 'vue'
+    import { defineComponent } from 'vue'
     import Cronometer from './Cronometer.vue'
     import Box from './Box.vue'
     import type { PropType } from 'vue'
     import type TaskI from '../interfaces/TaskI'
-    import { key } from '@/store'
-    import { useStore } from 'vuex'
 
     export default defineComponent({
         name: "Task",
@@ -21,14 +19,11 @@
             }
         },
         setup(props, { emit }) {
-            const store = useStore(key)
-
             const taskSelected = (): void => {
                 emit('taskSelectedEvent', props.task)
             }
 
             return {
-                task: props.task,
                 taskSelected
             }
         }

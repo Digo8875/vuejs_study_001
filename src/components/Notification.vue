@@ -1,6 +1,6 @@
 <script lang="ts">
     import { NotificationType } from '@/interfaces/NotificationI';
-import { useStore } from '@/store';
+    import { useStore } from '@/store';
     import { computed } from 'vue';
     import { defineComponent } from 'vue'
 

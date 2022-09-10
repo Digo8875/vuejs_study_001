@@ -7,6 +7,7 @@
     import Form from '@/components/Form.vue'
     import Task from '@/components/Task.vue'
     import Box from '@/components/Box.vue'
+    import Modal from '@/components/Modal.vue'
     import type TaskI from '@/interfaces/TaskI'
     import { CREATE_TASK_ACTION, LIST_TASK_ACTION, UPDATE_TASK_ACTION } from '@/store/action-types'
 
@@ -15,7 +16,8 @@
         components: {
             Form,
             Task,
-            Box
+            Box,
+            Modal
         },
         data () {
             return {
@@ -80,28 +82,27 @@
                 </span>
             </p>
         </div>
+
         <Task v-for="(task, index) in tasks" :key="index" :task="task" @taskSelectedEvent="selectTask"/>
-    </div>
-    <div class="modal" :class="{ 'is-active': selectedTask }" v-if="selectedTask">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
+
+        <Modal :showModal="selectedTask != null">
+            <template v-slot:header>
                 <p class="modal-card-title">Editar Tarefa</p>
                 <button class="delete" aria-label="close" @click="closeModal"></button>
-            </header>
-            <section class="modal-card-body">
+            </template>
+            <template v-slot:body>
                 <div class="field">
                     <label for="taskDescription" class="label">
                         Descrição
                     </label>
                     <input type="text" class="input" v-model="selectedTask.description" id="taskDescription"/>
                 </div>
-            </section>
-            <footer class="modal-card-foot">
+            </template>
+            <template v-slot:footer>
                 <button class="button is-success" @click="updateTask">Salvar</button>
                 <button class="button" @click="closeModal">Cancelar</button>
-            </footer>
-        </div>
+            </template>
+        </Modal>
     </div>
 </template>
 
