@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { defineComponent, ref } from 'vue'
     import { useStore } from '@/store'
     import { NotificationType } from '@/interfaces/NotificationI'
     import useNotificator from '@/hooks/notificator'
     import { CREATE_PROJECT_ACTION, UPDATE_PROJECT_ACTION } from '@/store/action-types'
+    import { useRouter } from 'vue-router'
 
     export default defineComponent({
         name: "Form",
@@ -12,45 +13,41 @@
                 type: String
             }
         },
-        mounted () {
-            if(this.id) {
-                const project = this.store.state.project.projects.find(proj => proj.id == this.id)
-                this.projectName = project?.name || ''
-            }
-        },
-        data () {
-            return {
-                projectName: ""
-            }
-        },
-        methods: {
-            save () {
-                if(this.id) {
-                    this.store.dispatch(UPDATE_PROJECT_ACTION, {
-                        id: this.id,
-                        name: this.projectName
-                    }).then(() => this.responseSuccess())
-                } else {
-                    this.store.dispatch(CREATE_PROJECT_ACTION, this.projectName)
-                        .then(() => this.responseSuccess())
-                }
-            },
-            responseSuccess () {
-                this.projectName = ''
-                this.notify(NotificationType.SUCCESS, 'Ação efetuada', 'Projeto cadastrado com sucesso!')
-                this.$router.push('/projects')
-            }
-        },
-        setup () {
+        setup(props) {
+            const router = useRouter()
             const store = useStore()
             const { notify } = useNotificator()
+            const projectName = ref("")
+
+            if(props.id) {
+                const project = store.state.project.projects.find(proj => proj.id == props.id)
+                projectName.value = project?.name || ''
+            }
+
+            const save = () => {
+                if (props.id) {
+                    store.dispatch(UPDATE_PROJECT_ACTION, {
+                        id: props.id,
+                        name: projectName.value
+                    }).then(() => responseSuccess())
+                } else {
+                    store.dispatch(CREATE_PROJECT_ACTION, projectName.value)
+                        .then(() => responseSuccess())
+                }
+            }
+
+            const responseSuccess = () => {
+                projectName.value = ''
+                notify(NotificationType.SUCCESS, 'Ação efetuada', 'Projeto cadastrado com sucesso!')
+                router.push('/projects')
+            }
+            
             return {
-                store,
-                notify
+                projectName,
+                save
             }
         }
     })
-
 </script>
 
 <template>
@@ -63,7 +60,7 @@
                 <label for="projectName" class="label">
                     Nome do projeto
                 </label>
-                <input type="text" class="input" v-model="projectName" id="projectName"/>
+                <input type="text" class="input" v-model="projectName" id="projectName" />
             </div>
             <div class="field">
                 <button class="button" type="submit">
@@ -75,4 +72,5 @@
 </template>
 
 <style>
+
 </style>
