@@ -1,6 +1,6 @@
 <script lang="ts">
     import { key } from '@/store'
-    import { defineComponent, computed } from 'vue'
+    import { defineComponent, computed, ref } from 'vue'
     import { useStore } from 'vuex'
     import Timer from './Timer.vue'
 
@@ -9,29 +9,30 @@
         components: {
             Timer
         },
-        data () {
-            return {
-                description: "",
-                projectId: ""
-            }
-        },
-        methods: {
-            finishTask (elapsedTime: Number) : void {
-                console.log("Tempo da tarefa: ", elapsedTime)
-                console.log("Descrição da tarefa: ", this.description)
-                this.$emit("taskSaveEvent", {
-                    durationSeconds: elapsedTime,
-                    description: this.description,
-                    project: this.projects.find(project => project.id == this.projectId)
-                })
-                this.description = ""
-            }
-        },
         emits: ["taskSaveEvent"],
-        setup () {
+        setup (props, {emit}) {
             const store = useStore(key)
+
+            const description = ref("")
+            const projectId = ref("")
+            const projects = computed(() => store.state.project.projects)
+
+            const finishTask = (elapsedTime: Number) : void => {
+                console.log("Tempo da tarefa: ", elapsedTime)
+                console.log("Descrição da tarefa: ", description.value)
+                emit("taskSaveEvent", {
+                    durationSeconds: elapsedTime,
+                    description: description.value,
+                    project: projects.value.find(project => project.id == projectId.value)
+                })
+                description.value = ""
+            }
+
             return {
-                projects: computed(() => store.state.project.projects)
+                description,
+                projectId,
+                projects,
+                finishTask
             }
         }
     })
