@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { defineComponent, ref } from 'vue'
     import Cronometer from './Cronometer.vue'
     import Box from './Box.vue'
     import type { PropType } from 'vue'
-    import type ITask from '../interfaces/TaskI'
+    import type TaskI from '../interfaces/TaskI'
+    import { key } from '@/store'
+    import { useStore } from 'vuex'
 
     export default defineComponent({
         name: "Task",
@@ -14,13 +16,20 @@
         },
         props: {
             task: {
-                type: Object as PropType<ITask>,
+                type: Object as PropType<TaskI>,
                 required: true
             }
         },
-        methods: {
-            taskSelected() : void {
-                this.$emit('taskSelectedEvent', this.task)
+        setup(props, { emit }) {
+            const store = useStore(key)
+
+            const taskSelected = (): void => {
+                emit('taskSelectedEvent', props.task)
+            }
+
+            return {
+                task: props.task,
+                taskSelected
             }
         }
     })
@@ -36,14 +45,14 @@
                 {{ task.project?.name || "N/D" }}
             </div>
             <div class="column">
-                <Cronometer :timeInSeconds="task.durationSeconds"/>
+                <Cronometer :timeInSeconds="task.durationSeconds" />
             </div>
         </div>
     </Box>
 </template>
 
 <style scoped>
-    .clickable {
-        cursor: pointer;
-    }
+.clickable {
+    cursor: pointer;
+}
 </style>

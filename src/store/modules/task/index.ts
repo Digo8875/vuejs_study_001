@@ -23,8 +23,14 @@ export const taskModule: Module<TaskState, State> = {
         }
     },
     actions: {
-        [LIST_TASK_ACTION]({commit}) {
-            http.get('tasks')
+        [LIST_TASK_ACTION]({commit}, filter: string) {
+            let url = '/tasks'
+
+            if(filter) {
+                url += '?description=' + filter
+            }
+            console.log(url)
+            http.get(url)
                 .then(response => commit(LIST_TASK_MUTATION, response.data))
         },
         [CREATE_TASK_ACTION]({commit}, task: TaskI) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { computed, defineComponent } from 'vue'
+    import { computed, defineComponent, ref, watchEffect } from 'vue'
     import { useStore } from '@/store'
     import { LIST_PROJECT_ACTION } from '@/store/action-types'
     import { NotificationType } from '@/interfaces/NotificationI'
@@ -42,15 +42,24 @@
                 return this.store.state.task.tasks?.length <= 0
             }
         },
-        setup () {
+        setup() {
             const store = useStore()
             const { notify } = useNotificator()
             store.dispatch(LIST_PROJECT_ACTION)
             store.dispatch(LIST_TASK_ACTION)
+
+            const filter = ref("")
+            // const tasks = computed(() => store.state.task.tasks?.filter(t => !filter.value || t.description.includes(filter.value)))
+
+            watchEffect(() => {
+                store.dispatch(LIST_TASK_ACTION, filter.value)
+            })
+
             return {
                 tasks: computed(() => store.state.task.tasks),
                 store,
-                notify
+                notify,
+                filter
             }
         }
     })
@@ -60,10 +69,18 @@
 <template>
     <Form @taskSaveEvent="saveTask"/>
     <div class="lista">
-        <Task v-for="(task, index) in tasks" :key="index" :task="task" @taskSelectedEvent="selectTask"/>
         <Box v-if="isListEmpty">
             Não há tarefas cadastradas hoje
         </Box>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" type="text" placeholder="Digite para filtrar" v-model="filter">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+            </p>
+        </div>
+        <Task v-for="(task, index) in tasks" :key="index" :task="task" @taskSelectedEvent="selectTask"/>
     </div>
     <div class="modal" :class="{ 'is-active': selectedTask }" v-if="selectedTask">
         <div class="modal-background"></div>
