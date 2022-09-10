@@ -1,12 +1,19 @@
 {
   "projects": [
     {
-      "id": 2,
-      "name": "asdasdxxxxx"
-    },
+      "name": "sdd",
+      "id": 1
+    }
+  ],
+  "tasks": [
     {
-      "name": "sdasdasd",
-      "id": 3
+      "id": 1,
+      "durationSeconds": 15,
+      "description": "Descrição 33",
+      "project": {
+        "id": 3,
+        "name": "sdasdasd"
+      }
     }
   ]
 }

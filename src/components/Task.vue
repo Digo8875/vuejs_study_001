@@ -7,6 +7,7 @@
 
     export default defineComponent({
         name: "Task",
+        emits: ["taskSelectedEvent"],
         components: {
             Cronometer,
             Box
@@ -16,13 +17,18 @@
                 type: Object as PropType<ITask>,
                 required: true
             }
+        },
+        methods: {
+            taskSelected() : void {
+                this.$emit('taskSelectedEvent', this.task)
+            }
         }
     })
 </script>
 
 <template>
     <Box>
-        <div class="columns">
+        <div class="columns clickable" @click="taskSelected">
             <div class="column is-4">
                 {{task.description || "Tarefa sem descrição"}}
             </div>
@@ -37,4 +43,7 @@
 </template>
 
 <style scoped>
+    .clickable {
+        cursor: pointer;
+    }
 </style>

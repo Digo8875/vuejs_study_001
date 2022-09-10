@@ -1,14 +1,21 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import TasksView from '../views/TasksView.vue'
-import Projects from '../views/Projects.vue'
-import List from '../views/Projects/List.vue'
-import Form from '../views/Projects/Form.vue'
+import Tasks from '@/views/Tasks.vue'
+import TaskList from '@/views/Tasks/List.vue'
+import Projects from '@/views/Projects.vue'
+import ProjectList from '@/views/Projects/List.vue'
+import ProjectForm from '@/views/Projects/Form.vue'
 
 const routes = [
     { 
         path: '/',
-        name: 'Tasks',
-        component: TasksView
+        component: Tasks,
+        children: [
+            {
+                path: '',
+                name: 'Tasks',
+                component: TaskList
+            }
+        ]
     },
     {
         path: '/projects',
@@ -17,17 +24,17 @@ const routes = [
             {
                 path: '',
                 name: 'Projects',
-                component: List
+                component: ProjectList
             },
             {
                 path: 'new',
                 name: 'New project',
-                component: Form
+                component: ProjectForm
             },
             {
                 path: ':id',
                 name: 'Edit project',
-                component: Form,
+                component: ProjectForm,
                 props: true
             }
         ]

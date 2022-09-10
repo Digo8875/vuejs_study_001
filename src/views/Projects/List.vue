@@ -1,7 +1,7 @@
 <script lang="ts">
     import { computed, defineComponent } from 'vue'
     import { useStore } from '@/store'
-    import { DELETE_PROJECT, GET_PROJECTS } from '@/store/actions-type'
+    import { DELETE_PROJECT_ACTION, LIST_PROJECT_ACTION } from '@/store/action-types'
     import { NotificationType } from '@/interfaces/NotificationI'
     import useNotificator from '@/hooks/notificator'
 
@@ -10,16 +10,16 @@
         setup () {
             const store = useStore()
             const { notify } = useNotificator()
-            store.dispatch(GET_PROJECTS)
+            store.dispatch(LIST_PROJECT_ACTION)
             return {
-                projects: computed(() => store.state.projects),
+                projects: computed(() => store.state.project.projects),
                 store,
                 notify
             }
         },
         methods: {
             deleteProject(id: string) {
-                this.store.dispatch(DELETE_PROJECT, id)
+                this.store.dispatch(DELETE_PROJECT_ACTION, id)
                     .then(() => this.responseSuccess())
             },
             responseSuccess () {
@@ -33,9 +33,6 @@
 
 <template>
     <section>
-        <h1 class="title">
-            Projetos
-        </h1>
         <router-link to="/projects/new" class="button">
             <span class="icon is-small">
                 <i class="fas fa-plus"></i>

@@ -3,7 +3,7 @@
     import { useStore } from '@/store'
     import { NotificationType } from '@/interfaces/NotificationI'
     import useNotificator from '@/hooks/notificator'
-    import { STORE_PROJECT, UPDATE_PROJECT } from '@/store/actions-type'
+    import { CREATE_PROJECT_ACTION, UPDATE_PROJECT_ACTION } from '@/store/action-types'
 
     export default defineComponent({
         name: "Form",
@@ -14,7 +14,7 @@
         },
         mounted () {
             if(this.id) {
-                const project = this.store.state.projects.find(proj => proj.id == this.id)
+                const project = this.store.state.project.projects.find(proj => proj.id == this.id)
                 this.projectName = project?.name || ''
             }
         },
@@ -26,12 +26,12 @@
         methods: {
             save () {
                 if(this.id) {
-                    this.store.dispatch(UPDATE_PROJECT, {
+                    this.store.dispatch(UPDATE_PROJECT_ACTION, {
                         id: this.id,
                         name: this.projectName
                     }).then(() => this.responseSuccess())
                 } else {
-                    this.store.dispatch(STORE_PROJECT, this.projectName)
+                    this.store.dispatch(CREATE_PROJECT_ACTION, this.projectName)
                         .then(() => this.responseSuccess())
                 }
             },
